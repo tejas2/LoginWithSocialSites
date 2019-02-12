@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">LoginWithSocialSites</string>
+    <string name="register">Register</string>
+    <string name="password_again">password again</string>
+    <string name="password">password</string>
+    <string name="email">email</string>
+</resources>
