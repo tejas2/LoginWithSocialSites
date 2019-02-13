@@ -17,19 +17,20 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var fireBaseAuth: FirebaseAuth
     private val RC_SIGN_IN: Int = 1
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var mGoogleSignInOptions: GoogleSignInOptions
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        firebaseAuth = FirebaseAuth.getInstance()
+        fireBaseAuth = FirebaseAuth.getInstance()
         configureGoogleSignIn()
         setupUI()
         btnRegister.setOnClickListener {
             startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
         }
+        txtForgotPwd.setOnClickListener { startActivity(Intent(this@LoginActivity, ForgotPasswordActivity::class.java)) }
     }
 
     private fun configureGoogleSignIn() {
@@ -57,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)
-                firebaseAuthWithGoogle(account!!)
+                fireBaseAuthWithGoogle(account!!)
             } catch (e: ApiException) {
                 Toast.makeText(this, "Google sign in failed:(", Toast.LENGTH_LONG).show()
             }
@@ -74,9 +75,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
+    private fun fireBaseAuthWithGoogle(acct: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener {
+        fireBaseAuth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
                 Toast.makeText(this, "Google sign in :))", Toast.LENGTH_LONG).show()
                 startActivity(Intent(this@LoginActivity, HomeActivity::class.java))

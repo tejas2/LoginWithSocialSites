@@ -7,8 +7,6 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.widget.Toast
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_register.*
 
@@ -21,8 +19,8 @@ class RegisterActivity : AppCompatActivity() {
         initUI()
         buttonRegister.setOnClickListener {
             validateEmailAndPassword()
-            FirebaseAuth.getInstance().createUserWithEmailAndPassword(etEmail.text.toString(), etPassword.text.toString()).addOnCompleteListener { task: Task<AuthResult> ->
-                if (task.isSuccessful) {
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(etEmail.text.toString(), etPassword.text.toString()).addOnCompleteListener {
+                if (it.isSuccessful) {
                     startActivity(Intent(this, HomeActivity::class.java))
                     finish()
                 } else {
