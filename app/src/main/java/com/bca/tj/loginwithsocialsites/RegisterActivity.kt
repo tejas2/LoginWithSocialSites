@@ -1,21 +1,36 @@
 package com.bca.tj.loginwithsocialsites
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.widget.Toast
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_register.*
 
 class RegisterActivity : AppCompatActivity() {
 
-    //private lateinit var fireBaseAuth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
         initUI()
         buttonRegister.setOnClickListener {
             validateEmailAndPassword()
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(etEmail.text.toString(), etPassword.text.toString()).addOnCompleteListener { task: Task<AuthResult> ->
+                if (task.isSuccessful) {
+                    startActivity(Intent(this, HomeActivity::class.java))
+                    finish()
+                } else {
+                    Toast.makeText(applicationContext, "E-mail or password is wrong", Toast.LENGTH_SHORT).show()
+                }
+
+            }
+
         }
     }
 
@@ -75,8 +90,9 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun isPasswordEmptyOrNot(p0: String?) {
-        when{
-            p0.isNullOrBlank() -> {}
+        when {
+            p0.isNullOrBlank() -> {
+            }
         }
 
         if (!(p0.isNullOrBlank()))
