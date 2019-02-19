@@ -19,14 +19,16 @@ class RegisterActivity : AppCompatActivity() {
         initUI()
         buttonRegister.setOnClickListener {
             validateEmailAndPassword()
-            FirebaseAuth.getInstance().createUserWithEmailAndPassword(etEmail.text.toString(), etPassword.text.toString()).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    startActivity(Intent(this, HomeActivity::class.java))
-                    finish()
-                } else {
-                    Toast.makeText(applicationContext, "E-mail or password is wrong", Toast.LENGTH_SHORT).show()
-                }
+            if (etEmail.text.toString().trim().isNotEmpty() && etPassword.text.toString().trim().isNotEmpty()) {
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(etEmail.text.toString().trim(), etPassword.text.toString().trim()).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        startActivity(Intent(this, HomeActivity::class.java))
+                        finish()
+                    } else {
+                        Toast.makeText(applicationContext, "E-mail or password is wrong", Toast.LENGTH_SHORT).show()
+                    }
 
+                }
             }
 
         }
