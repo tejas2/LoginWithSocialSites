@@ -26,7 +26,20 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         fireBaseAuth = FirebaseAuth.getInstance()
         configureGoogleSignIn()
-        setupUI()
+        google_button.setOnClickListener {
+            signIn()
+        }
+        btnLogin.setOnClickListener {
+            fireBaseAuth.signInWithEmailAndPassword(editEmail.text?.trim().toString(), editPassword.text?.trim().toString()).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Toast.makeText(this, "Google sign in :))", Toast.LENGTH_LONG).show()
+                    startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
+                    finish()
+                } else {
+                    Toast.makeText(this, "Google sign in failed:(", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
         btnRegister.setOnClickListener {
             startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
         }
@@ -39,12 +52,6 @@ class LoginActivity : AppCompatActivity() {
                 .requestEmail()
                 .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this, mGoogleSignInOptions)
-    }
-
-    private fun setupUI() {
-        google_button.setOnClickListener {
-            signIn()
-        }
     }
 
     private fun signIn() {
@@ -65,16 +72,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user != null) {
-            startActivity(Intent(this, HomeActivity::class.java))
-            finish()
-        }
-    }
-
-
     private fun fireBaseAuthWithGoogle(acct: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         fireBaseAuth.signInWithCredential(credential).addOnCompleteListener {
@@ -87,6 +84,14 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+        }
+    }
 
     override fun onBackPressed() {
         val user = FirebaseAuth.getInstance().currentUser
